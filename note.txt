@@ -1,0 +1,114 @@
+React性能提升方式：
+    setState异步方式，可以将多次的setState的操作综合成一次渲染
+    虚拟DOM的同层bidui
+    shouldComponentUpdate函数使用可以减少不必要的render
+
+
+-------------------------------------------------------------------------------------------
+其他方案流程
+1. state数据
+2. JSX模板
+3. 数据 + 模板 结合，生成真实的DOM来显示
+4. state发生改变
+5. 数据 + 模板 结合，生成真实的DOM， 并不直接替换原始的DOM
+6. 新的DOM（DocumentFragment）和原始的DOM做比对，找差异 （JS操作DOM都很耗时）
+7. 找出input框发生了变化
+8. 只用新的DOM中的input元素， 替换老DOM中的input元素
+
+缺陷：
+性能的提升并不明显
+
+虚拟DOM：
+1. state数据
+2. JSX模板
+3. 数据 + 模板 结合，生成真实的DOM来显示
+    eg：<div id='abc'><span>hello world</span></div>
+4. 生成虚拟DOM（虚拟DOM就是一个JS对象，用它来描述真实DOM）（损耗了性能）
+    eg：['div', {id: 'abc'}, ['span', {}, 'hello world']]
+5. state发生改变
+6. 数据 + 模板 生成新的虚拟DOM （极大的提升了性能）
+    eg：['div', {id: 'abc'}, ['span', {}, 'bye bye']]
+7. 比较原始虚拟DOM和新的虚拟DOM的区别，找出区别是span中的内容 （JS比较JS对象不耗时，极大的提升了性能）
+8. 直接操作DOM，改变span中的内容
+
+实际虚拟DOM原理：
+1. state数据
+2. JSX模板
+3. 数据 + 模板 结合，生成虚拟DOM （虚拟DOM就是一个JS对象，用它来描述真实DOM）（损耗了性能）
+    eg：['div', {id: 'abc'}, ['span', {}, 'hello world']]
+4. 用虚拟DOM的结构生成真实的DOM，来显示
+    eg：<div id='abc'><span>hello world</span></div>
+5. state发生改变
+6. 数据 + 模板 生成新的虚拟DOM （极大的提升了性能）
+    eg：['div', {id: 'abc'}, ['span', {}, 'bye bye']]
+7. 比较原始虚拟DOM和新的虚拟DOM的区别，找出区别是span中的内容 （JS比较JS对象不耗时，极大的提升了性能）
+8. 直接操作DOM，改变span中的内容
+
+优点：
+1. 性能提升了
+2. 它使得跨端应用得以实现。React Native
+
+
+-------------------------------------------------------------------------------------------
+State
+setState是异步函数，调用之后不会立即执行,在react直接操作DOM节点大概率会出现问题
+eg： this.setState((prevState) => (
+        {
+            list: [...prevState.list, prevState.inputValue],
+            inputValue: ''
+        }
+    ));
+
+    console.log(this.ul.querySelectorAll('div').length);
+    控制台打印出的div的个数会比实际div的个数少1， 是因为console.log(this.ul.querySelectorAll('div').length)先执行，react底层才执行setState的回调
+
+
+-------------------------------------------------------------------------------------------
+ref：在react中直接获取元素使用
+在JSX模板中添加ref属性
+eg：<ul ref={(ul) => {this.ul = ul}}>
+    ref属性接收的是一个函数，参数为当前DOM元素，this.ul = ul就是代表将ul也就是当前DOM元素赋值给当前组间的ul属性
+
+
+-------------------------------------------------------------------------------------------
+React生命周期函数
+
+生命周期函数指在某一个时刻组间会自动调用执行的函数 
+https://www.jianshu.com/p/514fe21b9914
+http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+
+Initialization:
+    setup props and state
+
+Mounting:
+    componentWillMount: 在组件即将被挂载到页面的时候自动执行
+    render:
+    componentDidMount: 在组件挂载到页面之后自动执行
+
+Updating:
+    props改变：
+        componentWillReceiveProps: 
+            一个组件要从父组件接收参数，
+            如果这个组件第一次存在于父组件中，不会执行
+            如果这个组件之前就已经存在于父组件中，才会执行
+        shouldComponentUpdate: 组件被更新之前自动执行, 返回boolean类型，判断是否该更新组件
+        componentWillUpdate: 组件被更新之前执行，shouldComponentUpdate返回true才会执行
+        render:
+        componentDidUpdate: 组件更新完成之后执行
+    state改变：
+        shouldComponentUpdate:
+        componentWillUpdate:
+        render:
+        componentDidUpdate:
+
+Unmounting:
+    componentWillUnmount: 当组件即将被从页面中剔除的时候，会被执行
+
+
+-------------------------------------------------------------------------------------------
+Charles模拟数据请求：
+1. 安装证书： Help => SSL Proxying => Install Charles Root Certificate
+2. 信任该证书
+3. 浏览器配SwitchyOmega: HTTP, localhost/127.0.0.1 8888
+4. 不是访问localhost:3000, 访问http://localhost.charlesproxy.com:3000/，此URL只有在启动charles才有效
+5. Charles Tools => Map Local 添加本地文件映射
