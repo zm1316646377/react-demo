@@ -111,4 +111,4 @@ Charles模拟数据请求：
 2. 信任该证书
 3. 浏览器配SwitchyOmega: HTTP, localhost/127.0.0.1 8888
 4. 不是访问localhost:3000, 访问http://localhost.charlesproxy.com:3000/，此URL只有在启动charles才有效
-5. Charles Tools => Map Local 添加本地文件映射
+5. Charles Tools => Map Local 添加request和本地文件映射
