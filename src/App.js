@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './App.css';
 
+// For：动画demo
 class App extends Component {
 
     constructor(props) {

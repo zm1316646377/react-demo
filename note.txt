@@ -112,3 +112,24 @@ Charles模拟数据请求：
 3. 浏览器配SwitchyOmega: HTTP, localhost/127.0.0.1 8888
 4. 不是访问localhost:3000, 访问http://localhost.charlesproxy.com:3000/，此URL只有在启动charles才有效
 5. Charles Tools => Map Local 添加request和本地文件映射
+
+
+-------------------------------------------------------------------------------------------
+Antd ：ant design, react的UI library
+引入CSS样式：import 'antd/dist/antd.css';
+
+Redux:
+https://www.jianshu.com/p/e984206553c2
+
+Redux Note：
+store必须是唯一的，整个应用只能有一个store
+只有store能改变自己的内容
+reducer必须是纯函数: 给定固定的输入，就一定会有固定的输出，而且不会有任何副作用, 不能修改参数
+
+createStore
+store.dispatch
+store.getState
+store.subscribe
+
+
+
