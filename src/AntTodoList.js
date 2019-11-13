@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
-import { Input, Button, List } from 'antd';
 import store from './store/index.js';
-import { getInputChangeAction, getAddItemAction, getDeleteItemAction } from './store/actionCreator';
- 
+import { getInitList, getInputChangeAction, getAddItemAction, getDeleteItemAction, initListAction } from './store/actionCreator';
+import TodoListUI from './AntTodoListUI';
+import axios from 'axios';
+
+// 容器组件 
 class AntTodoList extends Component {
 
     constructor(props) {
@@ -12,30 +14,38 @@ class AntTodoList extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
         this.handleBtnClick = this.handleBtnClick.bind(this);
+        this.handleItemDelete = this.handleItemDelete.bind(this);
         // 订阅store
         store.subscribe(this.handleStoreChange);
     }
 
     render() {
         return (
-            <div style = {{marginTop: '10px', marginLeft: '10px'}}>
-                <div>
-                    <Input 
-                        value = {this.state.inputValue} 
-                        placeholder = 'todo info' 
-                        style = {{width: '300px', marginRight: '10px'}}
-                        onChange = {this.handleInputChange}/>
-                    <Button type = 'primary' onClick = {this.handleBtnClick}>提交</Button>
-                </div>
-                <List
-                    // header = { <div>Header</div> }
-                    // footer = { <div>Footer</div> }
-                    style = {{marginTop: '10px', width: '300px'}}
-                    bordered
-                    dataSource = { this.state.list }
-                    renderItem = { (item, index) => ( <List.Item onClick = {this.handleItemDelete.bind(this, index)}>{item}</List.Item> )}/>
-            </div>
+            <TodoListUI 
+                inputValue = {this.state.inputValue}
+                list = {this.state.list}
+                handleInputChange = {this.handleInputChange}
+                handleBtnClick = {this.handleBtnClick}
+                handleItemDelete = {this.handleItemDelete}/>
         )
+    }
+
+    componentDidMount() {
+        const action = getInitList();
+        store.dispatch(action);
+
+        // 添加了thunk中间件， 可以在action中请求数据
+        // const action = getTodoList();
+        // console.log(action)
+        // store.dispatch(action);
+
+        // axios.get('./todolist.json')
+        //     .then((res) => {
+        //         const data = res.data;
+        //         const action = initListAction(data);
+        //         console.log(action);
+        //         store.dispatch(action);
+        //     });
     }
 
     handleInputChange(event) {

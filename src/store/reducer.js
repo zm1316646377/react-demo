@@ -1,5 +1,5 @@
 // reducer: 负责管理数据
-import { CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM } from './actionType';
+import { CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM, INIT_LIST_ACTION } from './actionType';
 
 const defaultState = {
     inputValue: '123',
@@ -7,11 +7,16 @@ const defaultState = {
     list: []
 }
 
-
 // reducer可以接收state， 但是不能修改state
 
 // state: store里上一次的state
 export default (state = defaultState, action) => {
+    if (action.type === INIT_LIST_ACTION) {
+        const newState = JSON.parse(JSON.stringify(state));
+        newState.list = action.list;
+        return newState;
+    }
+
     if (action.type === CHANGE_INPUT_VALUE) {
         const newState = JSON.parse(JSON.stringify(state));
         newState.inputValue = action.value;
