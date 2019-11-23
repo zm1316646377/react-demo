@@ -1,0 +1,1 @@
+export const CHANGE_FOCUSED_VALUE_ACTION = 'header/change_focused_value';

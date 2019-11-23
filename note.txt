@@ -195,6 +195,21 @@ export const GlobalStyle = createGlobalStyle`
     }
 `;
 
+- 使用combineReducers对多个reducer进行整合，store的state会多一层，在将store的state映射到组件的props去
+的时候也需要再多一层属性。
+eg：
+export default combineReducers({
+    header: headerReducer
+});
 
+const mapStateToProps = (state) => {
+    return {
+        focused: state.header.focused
+    }
+}
+
+immutable.js:帮助生成immutable（不可变）对象，eg: 封装header部分state对象
+
+redux-immutable: 可以将全局的store封装成immutable对象
 
 

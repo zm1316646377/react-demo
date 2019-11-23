@@ -1,13 +1,10 @@
-const defaultState = {
-    focused: false
-};
+//  import { combineReducers } from 'redux';
+import { combineReducers } from 'redux-immutable';
+ import { reducer as headerReducer } from '../common/header/store';
 
-export default (state = defaultState, action) => {
-    if (action.type === 'change_focused_value') {
-        const newState = JSON.parse(JSON.stringify(state));
-        newState.focused = action.value;
-        return newState;
-    } 
+//  将全局的store对象封装成immutable对象
+const reducer = combineReducers({
+    header: headerReducer
+});
 
-    return state;
-}
+ export default reducer;
