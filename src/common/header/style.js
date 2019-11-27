@@ -55,7 +55,7 @@ export const NavItem = styled.div`
 export const SearchWrapper = styled.div`
     position: relative;
     float: left;
-    .iconfont {
+    .zoom {
         position: absolute;
         right: 5px;
         top: 13px;
@@ -114,7 +114,7 @@ export const NavSearch = styled.input.attrs({
 
 export const SearchInfo = styled.div`
     position: absolute;
-    visibility: hidden;
+    /* visibility: hidden; */
     left: 0;
     top: 56px;
     width: 240px;
@@ -131,8 +131,20 @@ export const SearchInfoTitle = styled.div`
 `;
 
 export const SearchInfoSwitch = styled.span`
+    /*  flex：弹性盒子布局 align-items 定义子元素在Y轴上对齐方式 */
+    display: flex;
+    align-items: center;
+   
+    cursor: pointer;
     float: right;
     font-size: 13px;
+    .switch-spin {
+        display: block;
+        margin-right: 2px;
+        transition: all .3s ease-in;
+        /* transform: rotate(0deg); */
+        transform-origin: center center;
+    }
 `;
 
 export const SearchInfoItem = styled.a`
