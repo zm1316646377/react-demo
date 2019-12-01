@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { CSSTransition } from 'react-transition-group'
 import { connect } from 'react-redux';
 import { actionCreator } from './store';
+import { actionCreator as loginActionCreator } from '../../pages/login/store';
+import { Link } from 'react-router-dom';
 import { 
     HeaderWrapper, 
     Logo, 
@@ -19,15 +21,21 @@ import {
 
 class Header extends Component {
     render() {
-        const { focused, handleInputFocus, handleInputBlur, list } = this.props;
+        const { focused, handleInputFocus, handleInputBlur, list, login, logout } = this.props;
 
         return (
             <HeaderWrapper>
-                <Logo />
+                <Link to = '/'>
+                    <Logo />
+                </Link>
                 <Nav>
                     <NavItem className='left active'>首页</NavItem>
                     <NavItem className='left'>下载App</NavItem>
-                    <NavItem className='right'>登陆</NavItem>
+                    {
+                        login ? 
+                            <NavItem className='right' onClick = {logout} >退出</NavItem> 
+                            : <Link to = '/login'><NavItem className='right'>登陆</NavItem></Link>
+                    }
                     <NavItem className='right'>
                         <span className="iconfont">&#xe636;</span>
                     </NavItem>
@@ -56,6 +64,7 @@ class Header extends Component {
                         写文章</Button>
                     <Button className = 'reg'>注册</Button>
                 </Addition>
+                {/* <a href = '/api/headerList.json'>baidu</a> */}
             </HeaderWrapper>
         )
     }
@@ -103,13 +112,13 @@ const mapStateToProps = (state) => {
         list: state.getIn(['header', 'list']),
         page: state.getIn(['header', 'page']),
         totalPage: state.getIn(['header', 'totalPage']),
+        login: state.getIn(['login', 'login'])
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         handleInputFocus(list) {
-            console.log(list);
             if (list.size === 0) {
                 dispatch(actionCreator.createGetTrendingSearchListAction());
             }
@@ -140,6 +149,9 @@ const mapDispatchToProps = (dispatch) => {
             spinIcon.style.transform = 'rotate(' + originAngle + 'deg)';
             const action = actionCreator.createChangePageAction();
             dispatch(action);
+        },
+        logout() {
+            dispatch(loginActionCreator.createLogoutAction());
         }
     }
 }
